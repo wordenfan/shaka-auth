@@ -13,7 +13,9 @@ class ShakaAuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->publishes([
+            __DIR__.'/config/config.php' => config_path('shaka-auth.php'),
+        ]);
     }
 
     /**
@@ -23,11 +25,19 @@ class ShakaAuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('shakaAuth', function ($app) {
+        $this->app->bind('ShakaAuth', function ($app) {
+                    return new ShakaRole($app);
+                });
 
-            $instance = new ShakaRole();
+        $this->app->alias('ShakaAuth', 'Cty\ShakaAuth\ShakaAuth');
 
-            return $instance;
-        });
+        $this->mergeConfig();
+    }
+
+    private function mergeConfig()
+    {
+        $this->mergeConfigFrom(
+            __DIR__.'/config/config.php', 'shaka-auth'
+        );
     }
 }
