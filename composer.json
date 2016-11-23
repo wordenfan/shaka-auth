@@ -15,6 +15,5 @@
         "psr-4": {
             "Cty\\ShakaAuth\\": "src/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
