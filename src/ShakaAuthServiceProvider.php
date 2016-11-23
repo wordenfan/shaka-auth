@@ -25,13 +25,8 @@ class ShakaAuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //$this->app->singleton('shakaAuth', function ($app) {
-        //    $instance = new ShakaRole();
-        //    return $instance;
-        //});
-
         $this->app->bind('ShakaAuth', function ($app) {
-                    return new Entrust($app);
+                    return new ShakaRole($app);
                 });
 
         $this->app->alias('ShakaAuth', 'Cty\ShakaAuth\ShakaAuth');
