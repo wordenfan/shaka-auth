@@ -12,6 +12,6 @@ class ShakaAuthFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'shakaAuth';
+        return 'ShakaAuth';
     }
 }
