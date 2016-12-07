@@ -44,10 +44,9 @@ class ShakaAuth
 		$controller = $controller_arr['controller'];
 		$action = $controller_arr['action'];
 
-//		dump($request->fullUrl());
-//        dump($request->route()->getActionName());
-//        dump($request->route()->getAction());
-//        dump($request->route()->getController());
+		dump($controller);
+		dump($action);
+		exit;
 
 		return $next($request);
 	}

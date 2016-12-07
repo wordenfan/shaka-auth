@@ -2,6 +2,11 @@
 
 namespace Cty\ShakaAuth\Traits;
 
+use Cty\ShakaAuth\BasePermission;
+use Cty\ShakaAuth\Plugin\AbstractPlugin;
+use Cty\ShakaAuth\Plugin\AuthMenu;
+use Cty\ShakaAuth\Plugin\PluginInterface;
+use HSOHealth\Models\Permission;
 use HSOHealth\Models\PermissionMenu;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -93,12 +98,12 @@ trait ShakaAuthRoleTrait
         $this->perms()->detach($permission);
     }
 
-    //权限列表 return array
-    //TODO 目前暂只支持id,name
+    /*
+     *
+    */
     public function permissionList(array $select=[])
     {
         $select = array_merge($select,['id','name']);
-
         $permission_list = $this->perms()->select($select)->get()->toArray();
 
         $return_arr = [];
@@ -109,17 +114,14 @@ trait ShakaAuthRoleTrait
         return $return_arr;
     }
 
-    public function permissionMenuList()
+    /**
+     * 权限插件的连贯操作
+     * return BasePermission实例
+     */
+    public function basePermission()
     {
-        $permission_list = $this->perms()->where('type',2)->get()->toArray();
-
-        $return_arr = [];
-        foreach($permission_list as $perm){
-            $res = DB::table(Config::get('shaka-auth.permission_menu_table'))->where('id',$perm['ref_id'])->first();
-            $return_arr[$res->id] = $res;
-        }
-
-        return $return_arr;
+        $role_arr = is_array($this) ? $this : [$this];
+        return new BasePermission($role_arr);
     }
 
     public function perms()
@@ -129,7 +131,7 @@ trait ShakaAuthRoleTrait
 
     public function users()
     {
-//        return $this->belongsToMany(Config::get('auth.model'), Config::get('shaka-auth.role_user_table'));
         return $this->belongsToMany(Config::get('shaka-auth.user'), Config::get('shaka-auth.role_user_table'));
     }
+
 }

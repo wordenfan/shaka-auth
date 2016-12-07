@@ -2,6 +2,9 @@
 
 namespace Cty\ShakaAuth\Traits;
 
+use Cty\ShakaAuth\BasePermission;
+use Cty\ShakaAuth\Plugin\PluginInterface;
+use HSOHealth\Models\Role;
 use Illuminate\Support\Facades\Config;
 
 /**
@@ -44,61 +47,6 @@ trait ShakaAuthUserTrait
         return $requireAll ? true : false;
     }
 
-    /** 校验是否具备某个权限
-     * @param int|string|array 支持id或name的单个 或数组形式
-     * return bool
-     */
-    public function menuList()
-    {
-        $role_list = $this->roles()->get();
-
-        $return_arr = [];
-        foreach($role_list as $role){
-            $res = $role->permissionMenuList();
-            $return_arr = $return_arr + $res;
-        }
-
-        $return_arr = $this->rankMenuList($return_arr,Config::get('shaka-auth.menu_level'));
-        return $return_arr;
-    }
-
-    /* 菜单进行目录树整理
-     * @param array 待整理的以为原始目录集
-     * @param int 层级 默认三级
-     * $param array 不需传递,递归时调用
-     * return array
-     */
-    private function rankMenuList($originArr,$level=3,$child_arr=[])
-    {
-        if($level < 1){
-            return $originArr;
-        }
-
-        $loop_child_arr = [];
-        $final_arr = [];
-        foreach($originArr as $i=>$item){
-            $item = (array)$item;
-            if($item['level'] == $level){
-                if(!empty($child_arr)){
-                    foreach($child_arr as $j=>$cItem){
-                        if($item['id'] == $cItem['pid']){
-                            $item['list'][] = $cItem;
-                        }
-                    }
-                }
-
-                $loop_child_arr[] = $item;
-            }
-            if($item['level']<=$level){
-                $final_arr[] = $item;
-            }
-
-        }
-
-        rsort($loop_child_arr);
-        $level--;
-        return $this->rankMenuList($final_arr,$level,$loop_child_arr);
-    }
     /** 校验是否具备某个权限
      * @param int|string|array 支持id或name的单个 或数组形式
      * return bool
@@ -167,8 +115,19 @@ trait ShakaAuthUserTrait
         return $return_arr;
     }
 
+    /**
+     * 权限插件的连贯操作
+     * return BasePermission实例
+     */
+    public function basePermission()
+    {
+        $role_arr = $this->roles()->select(['*'])->get()->all();
+        return new BasePermission($role_arr);
+    }
+
     public function roles()
     {
         return $this->belongsToMany(Config::get('shaka-auth.role'), Config::get('shaka-auth.role_user_table'));
     }
+
 }

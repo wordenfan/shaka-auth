@@ -7,12 +7,12 @@
 
 namespace Cty\ShakaAuth;
 
-use Cty\ShakaAuth\Contracts\ShakaAuthPermissionInterface;
+use Cty\ShakaAuth\Plugin\AbstractPlugin;
 use Cty\ShakaAuth\Traits\ShakaAuthRoleTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
-class ShakaAuthPermission extends Model implements ShakaAuthPermissionInterface
+class ShakaAuthPermission extends Model
 {
     use ShakaAuthRoleTrait;
 
