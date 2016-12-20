@@ -99,7 +99,7 @@ trait ShakaAuthRoleTrait
     }
 
     /*
-     *
+     * 总权限列表
     */
     public function permissionList(array $select=[])
     {

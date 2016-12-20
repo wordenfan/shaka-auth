@@ -46,7 +46,7 @@ trait PluginTrait
     {
         $target = null;
         foreach($this->plugins as $plugin){
-            if(in_array($method,$plugin['func'])){
+            if(in_array(strtolower($method),$plugin['func'])){
                 if (!isset($plugin['instance'])) {
                     throw new Exception('Plugin not found of method: ' . $method);
                 }
@@ -54,11 +54,9 @@ trait PluginTrait
                 break;
             }
         }
-
         if ( !$target) {
             throw new Exception('Plugin not found for method: ' . $method);
         }
-
         return $target;
     }
 
