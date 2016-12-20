@@ -8,6 +8,7 @@
 namespace Cty\ShakaAuth;
 
 
+use Cty\ShakaAuth\Plugin\AuthFunc;
 use Cty\ShakaAuth\Plugin\AuthMenu;
 use Cty\ShakaAuth\Plugin\PluginTrait;
 use Illuminate\Support\Collection;
@@ -31,5 +32,6 @@ class BasePermission
     public function init()
     {
         $this->addPlugin(new AuthMenu());
+        $this->addPlugin(new AuthFunc());
     }
 }
