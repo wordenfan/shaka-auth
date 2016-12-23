@@ -28,7 +28,7 @@ abstract class AbstractPermission extends Model implements PluginInterface
     protected function getMenuDetail($basePermissionItem){
         $return_arr = [];
         foreach($basePermissionItem as $perm){
-            $res = D::table($this->table_name)->where('id',$perm['ref_id'])->first();
+            $res = DB::table($this->table_name)->where('id',$perm['ref_id'])->first();
             $return_arr[$res->id] = $res;
         }
         return $return_arr;
@@ -40,7 +40,7 @@ abstract class AbstractPermission extends Model implements PluginInterface
      * $param array 不需传递,递归时调用
      * return array
      */
-    private function rankMenuList($originArr,$level=3,$child_arr=[])
+    protected function rankMenuList($originArr,$level=3,$child_arr=[])
     {
         if($level < 1){
             return $originArr;

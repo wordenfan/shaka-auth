@@ -49,6 +49,8 @@ class ShakaAuth
 		//白名单
 		$auth_res = $this->chkWhiteList($controller,$action);
 		if($auth_res){
+			echo '有权限在白名单里,中断输出!';
+			exit;
 			return $next($request);
 		}
 
@@ -74,8 +76,8 @@ class ShakaAuth
 			echo '您不具有去权限!';
 			exit;
 		}
-		echo '恭喜,您有权限,中断!';
-		exit;
+//		echo '恭喜,您有权限,中断输出!';
+//		exit;
 
 		return $next($request);
 	}
